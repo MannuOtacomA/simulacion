@@ -14,6 +14,7 @@ let creditoAprobado = false;
 function ocultarSecciones() {
   document.getElementById("parametros").classList.remove("activa");
   document.getElementById("clientes").classList.remove("activa");
+  document.getElementById("credito").classList.remove("activa");
 }
 
 
@@ -23,7 +24,7 @@ function mostrarSeccion(id) {
 }
 
 
-function guardarTasa() {
+function guardarTasa() {//tasas
   let cmpTasaInteres = document.getElementById("tasaInteres");
   let tasa = parseInt(cmpTasaInteres.value);
   if (tasa >= 10 && tasa <= 20) {
@@ -67,7 +68,7 @@ function guardarCliente() {
   pintarClientes();  
 
   limpiar();
-  
+
 }
 
 
@@ -134,4 +135,135 @@ function limpiar(){
   mostrarTextoEnCaja("txtEgreso", "");
 
    document.getElementById("txtCedula").focus();
+}
+
+//PARTE2 ***************************
+
+function buscarClienteCredito(){
+  let cedula = recuperaraTexto("buscarCedulaCredito");
+   let clienteExistente = buscarCliente(cedula);
+   console.log(clienteExistente);
+
+   // si existe mostrar datos, si no mostrar mensaje
+    if (clienteExistente != null) { 
+      console.log("Ya existe la cedula: " + clienteExistente.cedula);    
+      
+      clienteSeleccionado = clienteExistente;
+      pintarClienteCredito(clienteExistente);
+
+    }else{
+      alert("Cliente no existe");    
+      clienteSeleccionado = null;  
+    }   
+    
+}
+
+
+function calcularCredito() {
+ 
+  // monto y plazo del formulario
+  let monto = recuperarFloat("montoCredito");
+  let plazo = recuperarInt("plazoCredito");
+
+  // validar campos
+  if (isNaN(monto) || monto <= 0) {
+    alert("Ingrese un monto mayor a 0");
+    return;
+  }
+
+  if (isNaN(plazo) || plazo <= 0) {
+    alert("Ingrese un plazo mayor a 0");
+    return;
+  }
+
+  //guardar en variables globales
+  montoCalculado = monto;
+  plazoCalculado = plazo;
+
+  // calcular cuota mensual
+  let tasaMensual = tasaInteres / 100 / 12;
+  let factor = Math.pow(1 + tasaMensual, plazo);
+  cuotaCalculada = monto * (tasaMensual * factor) / (factor - 1);
+
+  //capacidad de pago
+  let capacidadPago = clienteSeleccionado.ingreso - clienteSeleccionado.egreso;
+
+  //total a pagar
+  let totalPagar = cuotaCalculada * plazo;
+
+  //crédito es aprobado o no si cuota es menor o igual al 40%
+  creditoAprobado = cuotaCalculada <= (capacidadPago * 0.40);
+
+  //ver resultado
+  mostrarResultadoCredito(capacidadPago, totalPagar);
+}
+
+//resultado del credito 
+function mostrarResultadoCredito(capacidadPago, totalPagar) {
+  let resultadoDiv = document.getElementById("resultadoCredito");
+  let btnSolicitar = document.getElementById("btnSolicitarCredito");
+
+  let html = `
+    <div class="resultado-credito">
+      <h3>Resultados del Simulador</h3>
+      
+      <div class="resultado-item">
+        <strong>Capacidad de pago mensual:</strong> 
+        <span>$${capacidadPago.toFixed(2)}</span>
+        <small>(Ingresos: $${clienteSeleccionado.ingreso} - Egresos: $${clienteSeleccionado.egreso})</small>
+      </div>
+
+      <div class="resultado-item">
+        <strong>Cuota mensual calculada:</strong> 
+        <span class="cuota">$${cuotaCalculada.toFixed(2)}</span>
+      </div>
+
+      <div class="resultado-item">
+        <strong>Total a pagar (${plazoCalculado} meses):</strong> 
+        <span>$${totalPagar.toFixed(2)}</span>
+      </div>
+
+      <div class="resultado-item">
+        <strong>Interés total:</strong> 
+        <span>$${(totalPagar - montoCalculado).toFixed(2)}</span>
+      </div>
+
+      <div class="resultado-aprobacion ${creditoAprobado ? 'aprobado' : 'rechazado'}">
+        <h4> Resultado del crédito:</h4>
+        <p>${creditoAprobado 
+          ? 'CRÉDITO APROBADO - La cuota es adecuada para su capacidad de pago' 
+          : ' CRÉDITO RECHAZADO - La cuota supera el 40% de su capacidad de pago'}</p>
+      </div>
+    </div>
+  `;
+
+  resultadoDiv.innerHTML = html;
+
+  // activa o desactiva botón solicitar
+  btnSolicitar.disabled = !creditoAprobado;
+}
+
+
+//mostrar los datos del cliente
+function pintarClienteCredito(cliente) {
+  let cmpTabla = document.getElementById("datosClienteCredito");
+  
+  let contenidoTabla = "<table>" +
+    "<tr>" +
+    "<th> Cédula </th>" +
+    "<th> Nombre </th>" +
+    "<th> Apellido </th>" +
+    "<th> Ingresos </th>" +
+    "<th> Egresos </th>" +
+    "</tr>" +
+    "<tr>" +
+    "<td>" + cliente.cedula + "</td>" +
+    "<td>" + cliente.nombre + "</td>" +
+    "<td>" + cliente.apellido + "</td>" +
+    "<td>$ " + cliente.ingreso + "</td>" +
+    "<td>$ " + cliente.egreso + "</td>" +
+    "</tr>" +
+    "</table>";
+
+  cmpTabla.innerHTML = contenidoTabla;
 }

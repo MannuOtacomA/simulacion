@@ -15,6 +15,7 @@
 <nav>
   <button onclick="mostrarSeccion('parametros')">Parámetros</button>
   <button onclick="mostrarSeccion('clientes')">Clientes</button>
+  <button onclick="mostrarSeccion('credito')">Creditos</button>
 </nav>
 
 <section id="parametros" >
@@ -93,7 +94,76 @@
   </table>
 </section>
 
+<section id="credito">
+  <h2>Solicitar Crédito</h2>
 
+  <input type="text" id="buscarCedulaCredito">
+  <button onclick="buscarClienteCredito()">Buscar cliente</button>
+
+  <div id="datosClienteCredito" class="card">
+      <table>
+        <thead>
+          <!--<tr>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Ingresos</th>
+            <th>Egresos</th>
+            <th>Acciones</th>
+          </tr> -->
+        </thead>
+        <tbody id="tablaClientesCreditos">
+          <!--<tr>
+                <td>1712345678</td>
+                <td>Juan</td>
+                <td>Pérez</td>
+                <td>1200</td>
+                <td>500</td>
+                <td>
+                  <button>Actualizar</button>
+                  <button>Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>1723456789</td>
+                <td>María</td>
+                <td>Gómez</td>
+                <td>1500</td>
+                <td>600</td>
+                <td>
+                  <button>Actualizar</button>
+                  <button>Eliminar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>1734567890</td>
+                <td>Carlos</td>
+                <td>Ramírez</td>
+                <td>900</td>
+                <td>350</td>
+                <td>
+                  <button>Actualizar</button>
+                  <button>Eliminar</button>
+                </td>
+              </tr> -->
+        </tbody>
+      </table>
+
+  </div>
+
+  <input type="number" id="montoCredito" placeholder="Monto Credito">
+  <input type="number" id="plazoCredito" placeholder="Plazo Credito" >
+
+  <br>
+
+  <button onclick="calcularCredito()">Calcular crédito</button>
+
+  <div id="resultadoCredito"></div>
+
+  <button id="btnSolicitarCredito" onclick="solicitarCredito()" disabled>
+    Solicitar crédito
+  </button>
+</section>
 
 <script src="simulador_completo.js"></script>
 <script src="utilitarios.js"></script>
