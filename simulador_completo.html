@@ -16,6 +16,10 @@
   <button onclick="mostrarSeccion('parametros')">Parámetros</button>
   <button onclick="mostrarSeccion('clientes')">Clientes</button>
   <button onclick="mostrarSeccion('credito')">Creditos</button>
+  <button onclick="mostrarSeccion('contacto')">Contacto</button>
+
+  <!-- =====NUEVO BOTÓN: Créditos Registrados -->
+  <button onclick="mostrarSeccion('historial')">Créditos Registrados</button>
 </nav>
 
 <section id="parametros" >
@@ -39,7 +43,7 @@
   <input type="text"  id="txtApellido" placeholder="Apellido"/>
   <input type="number"  id="txtIngreso" placeholder="Ingreso" />
   <input type="number"  id="txtEgreso" placeholder="Egreso"/>
-
+  <input type="text"  id="txtEmail" placeholder="Email"/>
   <br>
 
   <button onclick="guardarCliente()" >Guardar cliente</button>
@@ -53,6 +57,7 @@
         <th>Apellido</th>
         <th>Ingresos</th>
         <th>Egresos</th>
+        <th>Emails</th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -163,6 +168,33 @@
   <button id="btnSolicitarCredito" onclick="solicitarCredito()" disabled>
     Solicitar crédito
   </button>
+
+  <!-- AHORA (botón nuevo según el taller) -->
+  <button id="btnAsignarCredito" onclick="asignarCredito()" disabled>
+    Asignar Crédito
+  </button>
+</section>
+
+
+<section id="contacto">
+  <h1>Desarrollado por: Manuel Otacoma</h1>
+</section>
+
+<!-- ===== NUEVA SECCIÓN: Créditos Registrados -->
+<section id="historial">
+  <h2>Créditos Registrados</h2>
+  
+  <div class="buscar-historial">
+    <input type="text" id="buscarCedulaListado" placeholder="Ingrese cédula del cliente">
+    <button onclick="buscarCreditosCliente()"> Buscar por cédula</button>
+    <button onclick="pintarCreditos(creditos)">📊 Ver todos los créditos</button>
+  </div>
+
+  <div id="tablaCreditos">
+    <p style="text-align:center; color:#64748b; padding:20px;">
+      Busque un cliente o vea todos los créditos registrados
+    </p>
+  </div>
 </section>
 
 <script src="simulador_completo.js"></script>
